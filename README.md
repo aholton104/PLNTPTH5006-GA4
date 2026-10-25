@@ -16,84 +16,88 @@
 
 ### 3: A TrimGalore container, its help info, and three options
 
-*Answer*: The container link (URI) is:
+*Answer*: The container link (URI) is: oras://community.wave.seqera.io/library/trim-galore:2.3.0--a56e49e832976df4. 
 
 Code to run `trim_galore --help` with the container:
 
 ```bash
-# Your command:
+apptainer exec oras://community.wave.seqera.io/library/trim-galore:2.3.0--a56e49e832976df4 trim_galore --help
 ```
 
-<!-- You don't need to paste the TrimGalore help output -->
+*Answer*: The option to indicate that the reads are paired-end: `--paired`.
 
-*Answer*: The option to indicate that the reads are paired-end:
+*Answer*: The option to set the output dir: `-o <OUTPUT_DIR>` or `--output_dir <OUTPUT_DIR>`.
 
-*Answer*: The option to set the output dir:
-
-*Answer*: The option to run FastQC on the trimmed FASTQ files:
+*Answer*: The option to run FastQC on the trimmed FASTQ files: `--fastqc`.
 
 ### 4: Default thresholds
 
-*Answer*: A) The default base quality score threshold:
+*Answer*: A) The default base quality score threshold: 20.
 
-*Answer*: B) The default read length threshold:
+*Answer*: B) The default read length threshold: 20 (18 for smallRNA adapter).
 
 ### 5: Write the `trimgalore.sh` script
-
-<!-- No need to paste the script: we'll look at scripts/trimgalore.sh directly. -->
 
 ### 6: Run the script for sample `S63`, and check the output files
 
 Code to run the script:
 
 ```bash
-# Your command:
+bash scripts/trimgalore.sh ../garrigos/fastq/S63_R1.fastq.gz ../garrigos/fastq/S63_R2.fastq.gz results/trimgalore
 ```
-
-<!-- You don't need to paste the TrimGalore logging output -->
 
 Code to list the output files:
 
 ```bash
-# Your command:
+ls results/trimgalore/
 ```
 
 The output of the command was:
 
 ```
+S63_R1.fastq.gz_trimming_report.json
+S63_R1.fastq.gz_trimming_report.txt
+S63_R1_val_1.fastqc.html
+S63_R1_val_1.fastqc.zip
+S63_R1_val_1.fq.gz
+S63_R2.fastq.gz_trimming_report.json
+S63_R2.fastq.gz_trimming_report.txt
+S63_R2_val_1.fastqc.html
+S63_R2_val_1.fastqc.zip
+S63_R2_val_1.fq.gz
 ```
 
-*Answer*: What each type of output file contains:
+*Answer*: What each type of output file contains: The `*_fastqc.html` files for R1 and R2 can be previewed to see visual representations of per base sequence qualities and other data provided by the FASTQC report. The `*_fastqc.zip` is a compressed file that serves as a different format of the same FASTQC results as the `*_fastqc.html` files. Likewise, the `*_trimming_report.json` and `*_trimming_report.txt` files contain the same information for R1 and R2 files. The `.txt` file is more human-readable than the `.json` file, but both provide a summary of the trimming process, script, and FASTQ files. This includes the total reads and basepairs processed, as well as an overview of removed sequences. The `*_fq.gz` files for R1 and R2 are compressed files that would contain the trimmed sequences for each read. 
 
-<!-- If your script failed at first: describe the problem and your fix here. -->
+Initially, my script failed because I put the variable for the output dir in the incorrect place, so it was not properly defined. I fixed it by moving the variable from the end of the command to after the `--output_dir` option.
 
 ### 7: Trimming results
 
-*Answer*: Which adapter sequence TrimGalore looked for, and how it decided on this:
+*Answer*: Which adapter sequence TrimGalore looked for, and how it decided on this: The adapter sequence was AGATCGGAAGAGC (Illumina) which was determined by scanning the reads for a specific sequence typically at the beginning or end of a read that corresponds to a predetermined adapter sequence which is then used for trimming. 
 
-*Answer*: Percentage of reads with adapters in R1 and R2:
+*Answer*: Percentage of reads with adapters in R1 and R2: R1 had 13.0% and R2 has 10.1% of reads with adapters. 
 
-*Answer*: In R1 and R2, were more bases removed by quality trimming or by adapter trimming?
+*Answer*: In R1 and R2, were more bases removed by quality trimming or by adapter trimming? More bases were removed by quality trimming than by adapter trimming as indicated by the length and count of sequences removed for matching the adapter sequence.
 
-*Answer*: Percentage of read pairs that were removed:
+*Answer*: Percentage of read pairs that were removed: 7.40% of sequence pairs were removed. 
 
 ### 8: Poly-G trimming
 
-*Answer*: Did TrimGalore do poly-G trimming, and did you have to tell it to?
+*Answer*: Did TrimGalore do poly-G trimming, and did you have to tell it to? Yes, poly-G trimming was enabled, but it was auto-detected. Poly-G trimming can be disabled by including an option (`--no_poly_g`) in the command within the script. 
 
-*Answer*: What TrimGalore concludes about the sequencing technology:
+*Answer*: What TrimGalore concludes about the sequencing technology: TrimGalore determines that Illumina sequencing technology was used based on the specific adapter sequence detected. 
 
-*Answer*: Was more poly-G trimming done in R1 or R2? (Optional: any idea why?)
+*Answer*: Was more poly-G trimming done in R1 or R2? (Optional: any idea why?) More poly-G trimming was done in R2, though I am not sure why. 
 
 ### 9: Compare the FastQC reports before and after trimming
 
 *Answer*: At least two differences between the reports,
-and whether things look better in terms of pass/warn/fail status:
+and whether things look better in terms of pass/warn/fail status: The trimmed R1 file displays fewer sequences and bases, as well as short sequence lengths compared to the raw R1 file. The summary is the same, except for the per base N content, which went from a warning status to a passing status. 
 
 *Answer*: Were the short reads with only `N`s removed?
-If so, was that due to the length threshold, or something else?
+If so, was that due to the length threshold, or something else? Short reads with only `N`s were removed, as indicated in the per base N content graphs for raw and trimmed R1 FASTQC reports. The short reads are likely removed due to their length not meeting the minmal length requirements. 
 
-*Answer*: Something you didn't expect or are confused about:
+*Answer*: Something you didn't expect or are confused about: Something I am confused about and would like to learn more about is interpreting the .txt files and the overview of removed sequences, paired-end validation, and other values that represent the trimming process so I can better understand the modifications made. 
 
 ------------------------------------------------------------------------
 
