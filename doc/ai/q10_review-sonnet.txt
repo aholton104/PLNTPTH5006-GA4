@@ -1,0 +1,21 @@
+
+❯ <ide_opened_file>The user opened the file
+  /fs/ess/PAS3493/people/aeholton2005/GA4/scripts/trimgalore.sh in the IDE.
+  This may or may not be related to the current task.</ide_opened_file>
+
+❯ Review the shell script. List the five most important problems or
+  improvements that could be made, starting the the most important. Provide a
+  one-sentence reason for each. Do not change it yet.
+
+  Read 1 file (ctrl+o to expand)
+
+● 1. Missing mkdir -p "$outdir": CLAUDE.md requires creating output dirs before
+     writing, and without it a fresh results/trimgalore path may fail.
+  2. No purpose/usage comment block under set -euo pipefail: this is a required
+     convention, and it tells users the script takes R1, R2, and an output dir.
+  3. No program version reported at the end: the conventions require it, so add
+     something like apptainer exec "$CONTAINER" trim_galore --version.
+  4. Variables named inconsistently: R1_FASTQ/R2_FASTQ are uppercase, which is
+     reserved for constants, so use lowercase names like fastq_r1 and fastq_r2.
+  5. No argument check: with set -u, a missing argument gives a cryptic "unbound
+     variable" error, so add a count check that prints the usage line.

@@ -1,0 +1,32 @@
+
+❯ <ide_opened_file>The user opened the file
+  /fs/ess/PAS3493/people/aeholton2005/GA4/scripts/trimgalore.sh in the IDE.
+  This may or may not be related to the current task.</ide_opened_file>
+
+❯ Review the shell script. List the five most important problems improvements
+  that could be made, starting the the most important. Provide a one-sentence
+  reason for each. Do not change it yet.
+
+  Read 1 file (ctrl+o to expand)
+
+● These are the five most important improvements to trimgalore.sh
+  (scripts/trimgalore.sh), most important first:
+
+  1. Create the output dir with mkdir -p "$outdir" before running Trim Galore.
+     The project conventions require it, and creating the dir yourself means the
+     script doesn't depend on Trim Galore making it.
+  2. Add a purpose and usage comment block, and check the argument count. Right
+     now there's no usage line, and with set -u a missing argument stops the
+     script with a cryptic "unbound variable" error instead of telling the user
+     how to call it.
+  3. Report the program version at the end (e.g. apptainer exec "$CONTAINER"
+     trim_galore --version). The conventions require it, and the version needs
+     to be in the log so the results can be reproduced.
+  4. Rename R1_FASTQ/R2_FASTQ to lowercase names (e.g. fastq_R1="$1") and quote
+     the assignments. Uppercase names are reserved for constants like CONTAINER,
+     and the current naming doesn't match outdir.
+  5. Take only the R1 file as input and work out the R2 name from it, or at
+     least check that both files exist. Passing two files by hand makes it easy
+     to swap or mismatch read pairs, and that kind of mistake can go unnoticed.
+
+  The script is unchanged.
