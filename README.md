@@ -107,60 +107,97 @@ If so, was that due to the length threshold, or something else? Short reads with
 
 ### 10: Sonnet reviews your script
 
-*Answer*: Your prompt:
+*Answer*: Your prompt: Review the shell script. List the five most important problems or improvements that could be made, starting the the most important. Provide a one-sentence reason for each. Do not change it yet.
 
 *Answer*: Claude's suggestions, and for each, whether you agree, disagree,
-or don't understand it, and why:
+or don't understand it, and why: 
+
+1. Missing `mkdir -p "$outdir"`: I agree with this suggestion. I think it is generally best practice to include the `mkdir -p <variable>` command in a shell script since it will prevent code from failing if a dir is not present or it is already in use. 
+1. No purpose/usage comment block under `set -euo pipefail`: I did not understand this suggestion. I believe it means to add a comment that explains the code in detail, but I do not think this is necessary for the shebang and safe-settings lines. 
+1. No program version reported at the end: I agree, and I think that it is also best practice to include program versions so you know exactly what happened when a command is executed and by what version of the program, even if it is already provided when the command is run. 
+1. Variables named inconsistently: `R1_FASTQ`/`R2_FASTQ` are uppercase: I agree that renaming the variables with lowercase for the "fastq" could help with consistency. Although, I would not make the R1 and R2 lowercase, since that would not be consistent with previous file naming convention.     
+1. No argument check with `set -u`: I do not know what this suggestion means. I remember that the `set -u` command has to do with undefined variables and that a command with fail if a variable is not properly defined, as discussed in class, but I do know what an argument check means in this case. 
+
 
 *Answer*: Was anything wrong, or in conflict with the course's practices?
 Did Claude refer to your `CLAUDE.md` conventions?
 
-*Answer*: The estimated cost of this conversation (from `/usage`):
+No, I do not think any of the suggestions were inherently wrong or conflicted with what I have learned so far. The `CLAUDE.md` conventions were referenced when recommending lowercase variables and using the `mkdir -p` command. 
+
+*Answer*: The estimated cost of this conversation (from `/usage`): $0.1093
 
 ### 11: Opus reviews your script
 
-*Answer*: The estimated cost of this conversation (from `/usage`):
+*Answer*: The estimated cost of this conversation (from `/usage`): $0.2359
 
 *Answer*: Which suggestions did only one of the two models make?
 
+Only Sonnet 5.5 made the suggestion to add a comment block for the shebang and safe-settings lines. Only Opus 5.5 made the suggestion to rework the code so that the R2 file name does not need to be typed out in full, which could lead to mismatched pairs if manually typed incorrectly.
+
 *Answer*: Did either model claim something that you know is wrong?
+
+No, I do not think either model made a claim that is completely wrong.
 
 *Answer*: Did either model check its claims, for example by running commands?
 
+No, neither model ran commands. 
+
 *Answer*: Did Opus's review change your mind about any of your answers to question 10?
+
+No, most of the suggestions were the same and the reasoning was worded similarly between the two outputs. I still think the suggestions are either confusing or reasonable, and my mind has not changed about what changes I would make to the script.
 
 *Answer*: How did the costs compare? Which review would you trust more, and why?
 Was the difference worth the difference in cost?
 
+The cost was over two times greater for the Opus 5.5 model with high effort level. It would be reasonable to trust the higher effort and more capable Opus 5.5 model in most situations. However, the outputs to the same promot here were fairly similar, so I do not think the difference in cost is worth it for this exercise. 
+
 ### 12: Run the script with a non-existent file
 
 ```bash
-# Your command:
+bash scripts/trimgalore.sh ../garrigos/fastq/S00_R1.fastq.gz ../garrigos/fastq/S63_R2.fastq.gz results/trimgalore/
 ```
 
 The output of the command was:
 
 ```
+Starting script trimgalore.sh
+Sun Oct 25 06:33:05 PM EDT 2026
+Input FASTQ files: ../garrigos/fastq/S00_R1.fastq.gz ../garrigos/fastq/S63_R2.fastq.gz
+Output dir: results/trimgalore/
+INFO:    Using cached SIF image
+INFO:    gocryptfs not found, will not be able to use gocryptfs
+Error: Input file not found: ../garrigos/fastq/S00_R1.fastq.gz
 ```
 
 *Answer*: What happens, and at which point does the script stop?
 
+An error message is printed to the terminal, and the script stops after the first argument fails when trying to name the input files. 
+
 ### 13: Claude adds a check to your script
 
-*Answer*: Your prompt:
+*Answer*: Your prompt: Add a check to scripts/trimgalore that both input FASTQ files exists. Exit with an informative error message if they do not exist.
 
 ```bash
-# Your command to test the updated script:
+bash scripts/trimgalore.sh ../garrigos/fastq/S00_R1.fastq.gz ../garrigos/fastq/S63_R2.fastq.gz results/trimgalore/
 ```
 
 The output of the command was:
 
 ```
+Starting script trimgalore.sh
+Sun Oct 25 06:40:59 PM EDT 2026
+Input FASTQ files: ../garrigos/fastq/S00_R1.fastq.gz ../garrigos/fastq/S63_R2.fastq.gz
+Output dir: results/trimgalore/
+Error: input FASTQ file not found: ../garrigos/fastq/S00_R1.fastq.gz
 ```
 
 *Answer*: Does it behave the way Claude claimed it would?
 
+Yes, it behaved the way that Claude claimed it would by printing an error message and exiting.
+
 *Answer*: Given what you saw in question 12, how useful is this check?
+
+In question 12, the command failed because it could not find the file name, as stated in the error message. Claude edited the code to print a near identical error message after this command failed. The check can be useful to identify what went wrong in the script, but in this case it seems to have printed almost the exact same message.
 
 ### 14: Claude writes a loop
 
