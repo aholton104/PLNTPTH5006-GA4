@@ -15,6 +15,14 @@ date
 echo "Input FASTQ files: $R1_FASTQ $R2_FASTQ"
 echo "Output dir: $outdir"
 
+# Check that the input files exist
+for fastq in "$R1_FASTQ" "$R2_FASTQ"; do
+    if [[ ! -f "$fastq" ]]; then
+        echo "Error: input FASTQ file not found: $fastq" >&2
+        exit 1
+    fi
+done
+
 # Run TrimGalore
 apptainer exec "$CONTAINER" trim_galore --paired --output_dir "$outdir" --fastqc "$R1_FASTQ" "$R2_FASTQ"
 
