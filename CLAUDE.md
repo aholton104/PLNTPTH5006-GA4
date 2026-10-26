@@ -34,6 +34,7 @@ infected with two avian *Plasmodium* species.
 - At the start, report the script name, the date, and the inputs;
   at the end, report the program version, a success message, and the date
 - Create output dirs with `mkdir -p` before writing to them
+- Check that all usage lines are detailed and throroughly explain all parts of the script's purpose 
 
 ## AI diary
 
