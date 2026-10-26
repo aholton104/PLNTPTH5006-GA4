@@ -103,8 +103,6 @@ If so, was that due to the length threshold, or something else? Short reads with
 
 ## Part C: Bring in genAI
 
-<!-- Export the conversations for questions 10, 11, 13, and 14 to `doc/ai`. -->
-
 ### 10: Sonnet reviews your script
 
 *Answer*: Your prompt: Review the shell script. List the five most important problems or improvements that could be made, starting the the most important. Provide a one-sentence reason for each. Do not change it yet.
@@ -201,85 +199,161 @@ In question 12, the command failed because it could not find the file name, as s
 
 ### 14: Claude writes a loop
 
-*Answer*: Your prompt:
+*Answer*: Your prompt: Write a loop that runs scripts/trimgalore.sh for the 7 samples with an ID starting with S6 with the output dir results/trimgalore. I will run the loop from the GA4 dir. Only show the loop. Do not add it to a file, and do not run it.
 
 The loop that Claude wrote:
 
 ```bash
-# Paste Claude's loop here
+for R1 in ../garrigos/fastq/S6*_R1.fastq.gz; do
+    R2="${R1/_R1.fastq.gz/_R2.fastq.gz}"
+    bash scripts/trimgalore.sh "$R1" "$R2" results/trimgalore
+done
 ```
 
 *Answer*: Does it run the script once per sample?
 
+Yes, I think it would run the script once per sample, not per FASTQ file.
+
 *Answer*: Does it get the correct R2 file for each R1 file?
+
+Yes, it will get the correct R2 file for each R1 file. 
 
 *Answer*: Does it only run for the 7 `S6` samples?
 
+Yes, it will only run for the 7 `S6` samples since the wildcard only fils in the blank for the number that comes after 6 in the file name.
+
 *Answer*: Did you change the loop? If so, what did you change and why?
+
+No, I do not think the loop needs to be changed. 
 
 ### 15: Test and run the loop
 
 The loop with `echo`, to test it:
 
 ```bash
-# Your loop:
+for R1 in ../garrigos/fastq/S6*_R1.fastq.gz; do
+    R2="${R1/_R1.fastq.gz/_R2.fastq.gz}"
+    echo bash scripts/trimgalore.sh "$R1" "$R2" results/trimgalore
+done
 ```
 
 The output of the loop was:
 
 ```
+bash scripts/trimgalore.sh ../garrigos/fastq/S63_R1.fastq.gz ../garrigos/fastq/S63_R2.fastq.gz results/trimgalore
+bash scripts/trimgalore.sh ../garrigos/fastq/S64_R1.fastq.gz ../garrigos/fastq/S64_R2.fastq.gz results/trimgalore
+bash scripts/trimgalore.sh ../garrigos/fastq/S65_R1.fastq.gz ../garrigos/fastq/S65_R2.fastq.gz results/trimgalore
+bash scripts/trimgalore.sh ../garrigos/fastq/S66_R1.fastq.gz ../garrigos/fastq/S66_R2.fastq.gz results/trimgalore
+bash scripts/trimgalore.sh ../garrigos/fastq/S67_R1.fastq.gz ../garrigos/fastq/S67_R2.fastq.gz results/trimgalore
+bash scripts/trimgalore.sh ../garrigos/fastq/S68_R1.fastq.gz ../garrigos/fastq/S68_R2.fastq.gz results/trimgalore
+bash scripts/trimgalore.sh ../garrigos/fastq/S69_R1.fastq.gz ../garrigos/fastq/S69_R2.fastq.gz results/trimgalore
 ```
 
-<!-- You don't need to paste the output of the loop that ran TrimGalore -->
-
 ```bash
-# Your command(s) to check the output files:
+ls results/trimgalore
 ```
 
 The output of the command(s) was:
 
 ```
+S63_R1.fastq.gz_trimming_report.json  S66_R2.fastq.gz_trimming_report.json
+S63_R1.fastq.gz_trimming_report.txt   S66_R2.fastq.gz_trimming_report.txt
+S63_R1_val_1_fastqc.html              S66_R2_val_2_fastqc.html
+S63_R1_val_1_fastqc.zip               S66_R2_val_2_fastqc.zip
+S63_R1_val_1.fq.gz                    S66_R2_val_2.fq.gz
+S63_R2.fastq.gz_trimming_report.json  S67_R1.fastq.gz_trimming_report.json
+S63_R2.fastq.gz_trimming_report.txt   S67_R1.fastq.gz_trimming_report.txt
+S63_R2_val_2_fastqc.html              S67_R1_val_1_fastqc.html
+S63_R2_val_2_fastqc.zip               S67_R1_val_1_fastqc.zip
+S63_R2_val_2.fq.gz                    S67_R1_val_1.fq.gz
+S64_R1.fastq.gz_trimming_report.json  S67_R2.fastq.gz_trimming_report.json
+S64_R1.fastq.gz_trimming_report.txt   S67_R2.fastq.gz_trimming_report.txt
+S64_R1_val_1_fastqc.html              S67_R2_val_2_fastqc.html
+S64_R1_val_1_fastqc.zip               S67_R2_val_2_fastqc.zip
+S64_R1_val_1.fq.gz                    S67_R2_val_2.fq.gz
+S64_R2.fastq.gz_trimming_report.json  S68_R1.fastq.gz_trimming_report.json
+S64_R2.fastq.gz_trimming_report.txt   S68_R1.fastq.gz_trimming_report.txt
+S64_R2_val_2_fastqc.html              S68_R1_val_1_fastqc.html
+S64_R2_val_2_fastqc.zip               S68_R1_val_1_fastqc.zip
+S64_R2_val_2.fq.gz                    S68_R1_val_1.fq.gz
+S65_R1.fastq.gz_trimming_report.json  S68_R2.fastq.gz_trimming_report.json
+S65_R1.fastq.gz_trimming_report.txt   S68_R2.fastq.gz_trimming_report.txt
+S65_R1_val_1_fastqc.html              S68_R2_val_2_fastqc.html
+S65_R1_val_1_fastqc.zip               S68_R2_val_2_fastqc.zip
+S65_R1_val_1.fq.gz                    S68_R2_val_2.fq.gz
+S65_R2.fastq.gz_trimming_report.json  S69_R1.fastq.gz_trimming_report.json
+S65_R2.fastq.gz_trimming_report.txt   S69_R1.fastq.gz_trimming_report.txt
+S65_R2_val_2_fastqc.html              S69_R1_val_1_fastqc.html
+S65_R2_val_2_fastqc.zip               S69_R1_val_1_fastqc.zip
+S65_R2_val_2.fq.gz                    S69_R1_val_1.fq.gz
+S66_R1.fastq.gz_trimming_report.json  S69_R2.fastq.gz_trimming_report.json
+S66_R1.fastq.gz_trimming_report.txt   S69_R2.fastq.gz_trimming_report.txt
+S66_R1_val_1_fastqc.html              S69_R2_val_2_fastqc.html
+S66_R1_val_1_fastqc.zip               S69_R2_val_2_fastqc.zip
+S66_R1_val_1.fq.gz                    S69_R2_val_2.fq.gz
 ```
 
-*Answer*: Are all 7 samples represented?
+*Answer*: Are all 7 samples represented? 
+
+Yes, all 7 samples are represented for both R1 and R2. 
 
 ### 16: A summary command
 
 *Answer*: Your prompt:
 
+Give me a simple command that prints the percentage of read pairs for each sample that TrimGalore removed based on the output files in results/trimgalore. I am a shell beginner, so only use basic commands like grep, cut, and for loops.
+
 ```bash
-# The command you got from Claude:
+for report in results/trimgalore/*_R2.fastq.gz_trimming_report.txt; do
+    sample=$(basename "$report" _R2.fastq.gz_trimming_report.txt)
+    percent=$(grep 'sequence pairs removed' "$report" | cut -d'(' -f2 | cut -d')' -f1)
+    echo "$sample $percent"
+done
 ```
 
 The output of the command was:
 
 ```
+S63 7.40%
+S64 3.35%
+S65 1.94%
+S66 3.71%
+S67 1.78%
+S68 2.56%
+S69 4.81%
 ```
 
 *Answer*: Did the output look right? If not, what did you do?
 
+Yes, the output correctly prints the percentage of read pairs that were removed. 
+
 *Answer*: Does the value for `S63` match your answer to question 7?
+
+Yes, the value for `S63` is the same as the answer from question 7 (7.40%).
 
 *Answer*: In your own words, how does the command work?
 
-### 17: Document your genAI use
+The command works by first looking for the trimming report for each sample in the results/trimgalore/ dir and names these files as the `$report`variable. Claude explains that the `basename` command removes the dir and the file details from the "clean" sample name, such as `S63`. It then defines this ouput as the `$sample` variable. The `grep` command searches the `$report` variable files for the phrase "sequence pairs removed" to find the percent of removed pairs. Claude explained that the pipe commands remove the text from before and after the percentage. Then, the "clean" name and the percent that was "cut" using `grep` are printed to the terminal. 
 
-<!-- No command/output needed here -- we check your `doc/ai` dir in the repo directly. -->
+### 17: Document your genAI use
 
 ### 18: Update your `CLAUDE.md`
 
 *Answer*: What you added to `CLAUDE.md`, and why:
 
+I added the line "Check that all usage lines are detailed and throroughly explain all parts of the script's purpose," since I think it would help to keep more detailed usage lines for each script so it does not get more confusing as more lines are added. 
+
 *Answer*: Did Claude follow the new instruction?
+
+Yes, when Claude was asked to review the script after updating the `CLAUDE.md` file, it suggested that usage lines needed to be more detailed. 
 
 ### 19: Reflection
 
-*Answer*:
+*Answer*: As someone who is not familiar with AI, I found it difficult to come up with detailed prompts that would I felt would be interpreted correctly. It was challenging to ask follow-up questions that were answered fully, and I felt that I had to use multiple prompts before Claud understood my questions. However, the option of having it review my scripts before trying to run them has helpful. I also thought it was helpful that Claude could explain what the code it wrote means so I know how each piece works. 
+To my knowledge, Claude did not make any incorrect suggestions. I checked everything it wrote before running it or allowing it to make changes to my script, and I did not catch anything that looked wrong. I thought the explanations were clear when Claude was prompted to explain a command, which can be helpful for me going forward. 
 
 ------------------------------------------------------------------------
 
 ## Part D: Publish your repo on GitHub
 
 ### 20: Create a GitHub repository, push, and create an Issue
-
-<!-- No command/output needed here -- we check your GitHub repo directly. -->
